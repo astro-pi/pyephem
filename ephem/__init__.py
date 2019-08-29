@@ -9,7 +9,7 @@ from datetime import tzinfo as _tzinfo
 from math import pi
 from time import localtime as _localtime
 
-__version__ = '3.7.7.0'
+__version__ = '13.7.7.0' # upstream version + 10
 
 twopi = pi * 2.
 halfpi = pi / 2.
@@ -58,7 +58,23 @@ HyperbolicBody = _libastro.HyperbolicBody
 EarthSatellite = _libastro.EarthSatellite
 
 readdb = _libastro.readdb
-readtle = _libastro.readtle
+_readtle = _libastro.readtle
+
+def readtle(*args, **kwargs):
+    """
+    Modified readtle function which ignores all arguments and instead reads from
+    /home/pi/iss.tle
+    """
+    file_name = "/home/pi/iss.tle"
+
+    with open(file_name) as f:
+        name, line1, line2 = [line.strip() for line in f.readlines()[:3]]
+    error = "Unexpected contents in iss.tle"
+    assert name == "ISS (ZARYA)", error
+    assert line1.startswith("1"), error
+    assert line2.startswith("2"), error
+    return _readtle(name, line1, line2)
+
 constellation = _libastro.constellation
 separation = _libastro.separation
 now = _libastro.now
@@ -503,10 +519,10 @@ class Observer(_libastro.Observer):
 
     def next_pass(self, body, singlepass=True):
         """Return the next rising, culmination, and setting of a satellite.
-        
+
         If singlepass is True, return next consecutive set of
             (rising, culmination, setting).
-        If singlepass is False, return 
+        If singlepass is False, return
             (next_rising, next_culmination, next_setting)
         """
 
@@ -519,7 +535,7 @@ class Observer(_libastro.Observer):
         result = _libastro._next_pass(self, body)
         # _libastro behavior is singlepass=False
         if ((not singlepass)
-                or (None in result) 
+                or (None in result)
                 or (result[4] >= result[0])):
             return result
         # retry starting just before next_rising
@@ -532,7 +548,7 @@ class Observer(_libastro.Observer):
         if result[0] <= result[2] <= result[4]:
             return result
         raise ValueError("this software is having trouble with those satellite parameters")
-        
+
 
 del describe_riset_search
 
