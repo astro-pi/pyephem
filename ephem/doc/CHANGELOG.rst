@@ -1,6 +1,23 @@
 PyEphem CHANGELOG
 =================
 
+Next
+----
+
+- Fixed the body ``copy()`` method to correctly copy the extra
+  attributes that some bodies have beyond those of a normal body, like
+  the catalog number of an Earth satellite.  This bug had in some cases
+  caused segmentation faults.
+
+Version 3.7.7.1 (2020 February 22)
+----------------------------------
+
+- GitHub issue #166: Fixed a memory leak in ``readdb()``.
+
+- GitHub issue #119: Fixed the ``Body.copy()`` method to correctly copy
+  object-specific fields across to the new object, like Saturn ring tilt
+  and Earth satellite catalog number.
+
 Version 3.7.7.0 (2019 August 18)
 --------------------------------
 

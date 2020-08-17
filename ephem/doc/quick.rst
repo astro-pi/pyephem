@@ -90,7 +90,9 @@ body.compute(date)
    |  ``g_ra`` and ``ra`` — `Apparent geocentric`_ right ascension for the epoch-of-date
    |  ``g_dec`` and ``dec`` — `Apparent geocentric`_ declination for the epoch-of-date
 
-   | ``elong`` — Elongation (angle to sun)
+   | ``elong`` — Elongation: the angle between the Sun and the body,
+     but with the sign flipped to negative
+     when the body is on the morning side of the sky.
    | ``mag`` — Magnitude
    | ``size`` — Size (diameter in arcseconds)
    | ``radius`` — Size (radius as an angle)
@@ -193,7 +195,7 @@ body.compute(observer)
 
  * These apparent positions
    include an adjustment to simulate atmospheric refraction
-   for the observer's ``temp`` and ``presure``;
+   for the observer's ``temp`` and ``pressure``;
    set the observer's ``pressure`` to zero to ignore refraction.
 
  * For earth satellite objects,
@@ -506,8 +508,10 @@ Observers
 
  * A ``ValueError`` signals a non-existent place.
 
-transit, rising, setting
-------------------------
+.. _transit-rising-setting:
+
+transit, rising, and setting
+----------------------------
 
  >>> sitka = ephem.Observer()
  >>> sitka.date = '1999/6/27'
